@@ -24,9 +24,6 @@ public class User {
     @Transient
     private String password;
 
-    @Column(name = "name")
-    @NotEmpty(message = "*Please provide your name")
-    private String name;
 
     public void setId(int id) {
         this.id = id;
@@ -40,20 +37,8 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-
-    public String getUsername() {
-
-        return username;
-    }
+    public String getUsername() { return username; }
 
     public void setUsername(String username) {
         this.username = username;

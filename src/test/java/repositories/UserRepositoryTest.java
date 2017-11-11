@@ -37,7 +37,7 @@ public class UserRepositoryTest {
     @Before
     public void setUp() {
         User alex = new User();
-        alex.setUsername("vex");alex.setId(1);alex.setPassword("23");alex.setName("alex");
+        alex.setUsername("vex");alex.setId(1);alex.setPassword("23");
         userRepository.save(alex);
         Mockito.when(userRepository.findByUsername(alex.getUsername()))
                 .thenReturn(alex);
@@ -46,15 +46,12 @@ public class UserRepositoryTest {
     @Test
     public void addAndFindName() {
 
-        for (User user:userRepository.findAll()) {
-            System.out.println(user.getName() + " DaI");
-        }
+
         String userName = "vex";
         User found = userRepository.findByUsername(userName);
         User found1 = userRepository.findByUsername("jo");
         System.out.println(found1);
 
-        System.out.println(found.getName());
         System.out.println("size: "+ userRepository.findAll().size());
         assert(found.getUsername().equals(userName));
     }

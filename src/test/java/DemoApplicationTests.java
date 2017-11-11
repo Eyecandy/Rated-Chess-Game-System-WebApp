@@ -47,7 +47,7 @@ public class DemoApplicationTests {
     public void setUp() {
         User alex = new User();
 
-        alex.setUsername("vex");alex.setId(1);alex.setPassword("23");alex.setName("alex");
+        alex.setUsername("vex");alex.setId(1);alex.setPassword("23");
 
         /*
         Mockito.when(userRepository.findByUsername(alex.getUsername()))

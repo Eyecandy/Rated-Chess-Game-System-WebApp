@@ -23,8 +23,6 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void saveUser(User user) {
-        System.out.println("in save USER from user service");
-        System.out.println(securityConfiguration);
         //securityConfiguration.passwordEncoder().encode("123");
         //user.setPassword(securityConfiguration.passwordEncoder().encode(user.getPassword()));
 
