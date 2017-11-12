@@ -23,11 +23,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public void saveUser(User user) {
-        //securityConfiguration.passwordEncoder().encode("123");
-        //user.setPassword(securityConfiguration.passwordEncoder().encode(user.getPassword()));
-
         userRepository.save(user);
-
     }
 
 }
