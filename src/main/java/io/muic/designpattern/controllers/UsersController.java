@@ -19,14 +19,11 @@ import javax.validation.Valid;
  */
 @RestController
 @CrossOrigin
-public class RegistrationController {
+public class UsersController {
     @Autowired
     private UserService userService;
     @Autowired
     SecurityConfiguration securityConfiguration;
-
-
-
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public JSONObject create(@RequestBody @Valid User user, BindingResult bindingResult) {
