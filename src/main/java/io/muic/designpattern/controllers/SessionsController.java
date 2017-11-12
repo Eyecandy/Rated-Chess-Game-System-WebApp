@@ -7,15 +7,17 @@ import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 
 
-@Controller
+@RestController
 public class SessionsController {
 
     @Autowired
@@ -24,13 +26,17 @@ public class SessionsController {
     @Autowired
     SecurityConfiguration securityConfiguration;
 
+    /**
+     * @param user the login depends on the validity user.username and user.password
+     * @return The object of return is a json, which contains the success message of the login.
+     */
     @RequestMapping(value = "/sessions", method = RequestMethod.POST)
     public JSONObject login(@RequestBody User user){
         User userExist = userService.findUserByUsername(user.getUsername());
         JSONObject json = new JSONObject();
         if (userExist != null ) {
-            String encodedPass = securityConfiguration.passwordEncoder().encode(user.getPassword());
-            if (encodedPass.equals(userExist.getPassword())) {
+            Boolean correctPass = BCrypt.checkpw(user.getPassword(), userExist.getPassword());
+            if (correctPass) {
                 json.put("success",true);
             }
             else {

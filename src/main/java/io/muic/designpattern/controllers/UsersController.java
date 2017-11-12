@@ -25,6 +25,11 @@ public class UsersController {
     @Autowired
     SecurityConfiguration securityConfiguration;
 
+    /**
+     * @param user the object being registered
+     * @param bindingResult determines the validity of the fields based on preset constraints in model
+     * @return
+     */
     @RequestMapping(value = "/users", method = RequestMethod.POST)
     public JSONObject create(@RequestBody @Valid User user, BindingResult bindingResult) {
         System.out.println(user.getUsername());
