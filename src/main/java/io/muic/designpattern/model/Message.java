@@ -2,28 +2,21 @@ package io.muic.designpattern.model;
 
 public class Message {
 
-    private Long from;
-    private String message;
+    private String from;
 
-    public Message(Long from, String message) {
-        this.from = from;
-        this.message = message;
+    public Message(){
     }
 
-    public Long getFrom() {
+    public Message(String from) {
+        this.from = from;
+    }
+
+    public String getFrom() {
         return from;
     }
 
-    public void setFrom(Long from) {
+    public void setFrom(String from) {
         this.from = from;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     //    private Integer startX;
