@@ -3,6 +3,9 @@ package io.muic.designpattern.model;
 public class Message {
 
     private String from;
+    private String command;
+    private String fenBoard;
+    private String source, target;
 
     public Message(){
     }
@@ -11,12 +14,49 @@ public class Message {
         this.from = from;
     }
 
+    public Message(String from,String command) {
+        this.from = from;
+        this.command = command;
+    }
+
     public String getFrom() {
         return from;
     }
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public String getCommand() {
+        return command;
+    }
+
+    public void setCommand(String command) {
+        this.command = command;
+    }
+
+    public String getFenBoard() {
+        return fenBoard;
+    }
+
+    public void setFenBoard(String fenBoard) {
+        this.fenBoard = fenBoard;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     //    private Integer startX;
