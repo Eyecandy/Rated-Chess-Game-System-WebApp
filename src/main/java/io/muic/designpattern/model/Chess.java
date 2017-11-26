@@ -21,6 +21,12 @@ public class Chess {
     @Column(name = "complete")
     private boolean isComplete;
 
+    @Column(name = "currentPlayer")
+    private int currentPlayer;
+
+    @Column(name = "fen")
+    private String fen;
+
     public int getId() {
         return id;
     }
@@ -37,6 +43,14 @@ public class Chess {
         return isComplete;
     }
 
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public String getFen() {
+        return fen;
+    }
+
     public void setComplete(boolean complete) {
         isComplete = complete;
     }
@@ -47,5 +61,13 @@ public class Chess {
 
     public void setPlayer(User player) {
         this.player = player;
+    }
+
+    public void setCurrentPlayer(int currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
     }
 }

@@ -1,7 +1,9 @@
 package io.muic.designpattern.controllers;
 
+import io.muic.designpattern.model.Chess;
 import io.muic.designpattern.model.MyMessage;
 import io.muic.designpattern.model.Reply;
+import io.muic.designpattern.services.ChessService;
 import io.muic.designpattern.services.SubscriberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -18,6 +20,9 @@ public class SocketController {
 
     @Autowired
     SubscriberService subscriberService;
+
+    @Autowired
+    ChessService chessService;
 
     String player1 = "";
     String player2 = "";
