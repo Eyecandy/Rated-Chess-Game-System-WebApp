@@ -1,5 +1,7 @@
 package io.muic.designpattern.model;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,6 +21,7 @@ public class Chess {
     private User player;
 
     @Column(name = "complete")
+    @ColumnDefault("false")
     private boolean isComplete;
 
     @Column(name = "currentPlayer")
