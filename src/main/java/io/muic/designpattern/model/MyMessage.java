@@ -1,13 +1,16 @@
 package io.muic.designpattern.model;
 
-public class Message {
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+
+public class MyMessage {
 
     private String from;
 
-    public Message(){
+
+    public MyMessage(){
     }
 
-    public Message(String from) {
+    public MyMessage(String from) {
         this.from = from;
     }
 
