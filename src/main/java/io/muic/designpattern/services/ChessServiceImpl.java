@@ -5,6 +5,8 @@ import io.muic.designpattern.repositories.ChessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("chessService")
 public class ChessServiceImpl implements ChessService {
 
@@ -20,4 +22,11 @@ public class ChessServiceImpl implements ChessService {
     public void saveChess(Chess chess) {
         chessRepository.save(chess);
     }
+
+    @Override
+    public List<Chess> getGamesAvailable() {
+        return chessRepository.findAllByPlayerIsNull();
+    }
+
+
 }

@@ -1,9 +1,6 @@
 package io.muic.designpattern.controllers;
 
-import io.muic.designpattern.model.Chess;
-import io.muic.designpattern.model.GameRequest;
-import io.muic.designpattern.model.MyMessage;
-import io.muic.designpattern.model.Reply;
+import io.muic.designpattern.model.*;
 import io.muic.designpattern.services.ChessService;
 import io.muic.designpattern.services.SubscriberService;
 import io.muic.designpattern.services.UserService;
@@ -77,11 +74,9 @@ public class SocketController {
         Chess chessGame = chessService.findOne(id);
 //        Chess chessGame = null;
         if (chessGame == null)
-            return new Reply("Zis is a Pwobwem");
-        else {
-            System.out.println("ok");
-            return new Reply("Works");
-        }
+            return new Reply("Error");
+        String from = message.getFrom();
+        String player1 = chessGame.getHost().getUsername();
 //        System.out.println("Chess game player : " + message.getFrom());
 //        System.out.println(message.getFrom() + " TEST " + id);
 //        String s = subscriberService.getSubscribers().get(simpMessageHeaderAccessor.getSessionId());
@@ -93,44 +88,45 @@ public class SocketController {
 //            player2 = "";
 //            return new Reply("reset");
 //        }
-//        if (message.getCommand().equals("start")){
-//            if (player1.equals("")){
-//                player1 = message.getFrom();
-//                System.out.println("player1 set");
-//                Reply wait = new Reply("wait");
-//                wait.setPlayer1(player1);
-//                return wait;
-//            }else {
-//                player2 = message.getFrom();
-//                Reply start = new Reply("start");
-//                start.setPlayer1(player1);
-//                start.setPlayer2(player2);
-//                System.out.println("player2 set");
-//                return start;
-//            }
-//        }
-//        if (message.getCommand().equals("move")){ // (message.getFrom().equals(player1))
-//            String player = message.getFrom();
-//            String reply = "switch";
-//            String fen = message.getFenBoard();
-//            String source = message.getSource();
-//            String target = message.getTarget();
-//            String player1 = chessGame.getHost().getUsername();
-//            String player2 = chessGame.getPlayer().getUsername();
-//
-//            int turn = (userService.findUserByUsername(player).equals(chessGame.getHost())) ? 2 : 1;
-//
-//            chessGame.setCurrentPlayer(turn);
-//            chessGame.setFen(fen);
-//            chessService.saveChess(chessGame);
-//
-//            Reply move = new Reply(reply, turn, fen);
-//            move.setSource(source);
-//            move.setTarget(target);
-//            move.setPlayer1(player1);
-//            move.setPlayer2(player2);
-//            return move;
-//        }
-//        return new Reply("Chess");
+        if (message.getCommand().equals("start")){
+            if (chessGame.getHost().getUsername().equals(from)){
+                System.out.println("player1 set");
+                Reply wait = new Reply("wait");
+                wait.setPlayer1(from);
+                return wait;
+            }else {
+                User player2 = userService.findUserByUsername(from);
+                if (player2 == null)
+                    return new Reply("Error");
+                chessGame.setPlayer(player2);
+                Reply start = new Reply("start");
+                start.setPlayer1(player1);
+                start.setPlayer2(from);
+                System.out.println("player2 set");
+                return start;
+            }
+        }
+        if (message.getCommand().equals("move")){ // (message.getFrom().equals(player1))
+            String player = message.getFrom();
+            String reply = "switch";
+            String fen = message.getFenBoard();
+            String source = message.getSource();
+            String target = message.getTarget();
+            String player2 = chessGame.getPlayer().getUsername();
+
+            int turn = (userService.findUserByUsername(player).equals(chessGame.getHost())) ? 2 : 1;
+
+            chessGame.setCurrentPlayer(turn);
+            chessGame.setFen(fen);
+            chessService.saveChess(chessGame);
+
+            Reply move = new Reply(reply, turn, fen);
+            move.setSource(source);
+            move.setTarget(target);
+            move.setPlayer1(player1);
+            move.setPlayer2(player2);
+            return move;
+        }
+        return new Reply("Chess");
     }
 }
