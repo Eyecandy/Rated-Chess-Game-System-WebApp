@@ -1,6 +1,7 @@
 package io.muic.designpattern.services;
 
 import io.muic.designpattern.model.Chess;
+import io.muic.designpattern.model.User;
 import io.muic.designpattern.repositories.ChessRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,13 @@ public class ChessServiceImpl implements ChessService {
     }
 
     @Override
-    public List<Chess> getGamesAvailable() {
+    public List<Chess> getAllGamesAvailable() {
         return chessRepository.findAllByPlayerIsNull();
+    }
+
+    @Override
+    public List<Chess> getGamesAvailable(User user) {
+        return chessRepository.findAllByPlayerIsNullAndHostIsNot(user);
     }
 
 

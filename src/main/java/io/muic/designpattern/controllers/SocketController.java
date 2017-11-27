@@ -53,6 +53,7 @@ public class SocketController {
 
     @MessageMapping("/create_game")
     public void create_game(MyMessage message,SimpMessageHeaderAccessor headerAccessor) throws Exception {
+        System.out.println(subscriberService.getSubscribers().values());
         String host = subscriberService.getSubscribers().get(headerAccessor.getSessionId());
         Chess chess = new Chess();
         chess.setHost(userService.findUserByUsername(host));
