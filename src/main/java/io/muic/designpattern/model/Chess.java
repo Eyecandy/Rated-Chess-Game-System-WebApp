@@ -24,6 +24,10 @@ public class Chess {
     @ColumnDefault("false")
     private boolean isComplete;
 
+    @Column(name = "ongoing")
+    @ColumnDefault("false")
+    private boolean isOngoing;
+
     @Column(name = "currentPlayer")
     private int currentPlayer;
 
@@ -44,6 +48,10 @@ public class Chess {
 
     public boolean isComplete() {
         return isComplete;
+    }
+
+    public boolean isOngoing() {
+        return isOngoing;
     }
 
     public int getCurrentPlayer() {
@@ -68,6 +76,10 @@ public class Chess {
 
     public void setCurrentPlayer(int currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public void setOngoing(boolean ongoing) {
+        isOngoing = ongoing;
     }
 
     public void setFen(String fen) {

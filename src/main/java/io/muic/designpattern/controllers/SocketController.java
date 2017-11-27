@@ -99,6 +99,7 @@ public class SocketController {
                 if (player2 == null)
                     return new Reply("Error");
                 chessGame.setPlayer(player2);
+                chessService.saveChess(chessGame);
                 Reply start = new Reply("start");
                 start.setPlayer1(player1);
                 start.setPlayer2(from);
@@ -114,7 +115,11 @@ public class SocketController {
             String target = message.getTarget();
             String player2 = chessGame.getPlayer().getUsername();
 
-            int turn = (userService.findUserByUsername(player).equals(chessGame.getHost())) ? 2 : 1;
+            int turn = (player.equals(chessGame.getHost().getUsername())) ? 2 : 1;
+            System.out.println(chessGame.getHost().getUsername());
+            System.out.println(chessGame.getPlayer().getUsername());
+            System.out.println(from);
+            System.out.println(turn);
 
             chessGame.setCurrentPlayer(turn);
             chessGame.setFen(fen);
