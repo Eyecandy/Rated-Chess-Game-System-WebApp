@@ -46,7 +46,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         registration.setInterceptors(new ChannelInterceptorAdapter() {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                System.out.println("Sub ID : " + accessor.getSubscriptionId());
+//                System.out.println("Sub ID : " + accessor.getSubscriptionId());
 //                System.out.println("Dest " + accessor.getDestination());
                 List<String> tokenList = accessor.getNativeHeader("user");
                 String token = null;

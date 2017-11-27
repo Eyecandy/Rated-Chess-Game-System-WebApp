@@ -12,8 +12,8 @@ public class ChessServiceImpl implements ChessService {
     ChessRepository chessRepository;
 
     @Override
-    public Chess findOne(long aLong) {
-        return chessRepository.findOne(aLong);
+    public Chess findOne(int aInt) {
+        return chessRepository.findOne(aInt);
     }
 
     @Override

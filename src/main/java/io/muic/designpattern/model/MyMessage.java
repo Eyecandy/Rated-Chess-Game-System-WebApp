@@ -1,7 +1,5 @@
 package io.muic.designpattern.model;
 
-import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-
 public class MyMessage {
 
     private String from;
