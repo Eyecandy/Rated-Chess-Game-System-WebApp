@@ -2,6 +2,7 @@ package io.muic.designpattern.controllers;
 
 import io.muic.designpattern.model.*;
 import io.muic.designpattern.services.ChessService;
+import io.muic.designpattern.services.OnlineUserService;
 import io.muic.designpattern.services.SubscriberService;
 import io.muic.designpattern.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class SocketController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    OnlineUserService onlineUserService;
 
     private SimpMessagingTemplate template;
 
@@ -77,6 +81,34 @@ public class SocketController {
             return new Reply("Error");
         String from = message.getFrom();
         String player1 = chessGame.getHost().getUsername();
+
+        if (message.getCommand().equals("resume")){
+            System.out.println("RESUME");
+            OnlineTuple onlinePlayers = onlineUserService.getGame(id);
+            if (onlinePlayers != null){
+                if (from.equals(onlinePlayers.getPlayerOne())){
+                    return new Reply("wait");
+                }else {
+                    Reply start = new Reply("start");
+                    if (player1.equals(onlinePlayers.getPlayerOne())){
+                        start.setPlayer1(player1);
+                        start.setPlayer2(from);
+                    }else {
+                        start.setPlayer1(from);
+                        start.setPlayer2(player1);
+                    }
+                    start.setFenBoard(chessGame.getFen());
+                    start.setTurn(chessGame.getCurrentPlayer());
+                    System.out.println("current turn " +chessGame.getCurrentPlayer() );
+                    onlineUserService.removeGame(id);
+                    return start;
+                }
+            }else {
+                onlineUserService.addGame(id, from,"");
+                return new Reply("wait");
+            }
+        }
+
         if (!chessGame.isOngoing() && message.getCommand().equals("start")){
             if (chessGame.getHost().getUsername().equals(from)){
                 System.out.println("player1 set");
