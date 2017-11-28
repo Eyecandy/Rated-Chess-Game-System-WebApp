@@ -46,4 +46,19 @@ public class GamesController {
         chessService.delete(Integer.parseInt(chessID));
         System.out.println("Deleted chess game " + chessID);
     }
+
+    @RequestMapping(value = "/ongoing/{user}", method = RequestMethod.GET)
+    public JSONObject ongoing(@PathVariable String user){
+        System.out.println(user);
+        User userExist = userService.findUserByUsername(user);
+        JSONObject json = new JSONObject();
+        List<Chess> games = chessService.getOngoingGames(userExist);
+        System.out.println(games.size());
+        List<GamesDTO> gamesDTO = new ArrayList<>();
+        for (Chess game: games){
+            gamesDTO.add(new GamesDTO(game.getId(), game.getHost().getUsername(),game.getFen()));
+        }
+        json.put("game", gamesDTO);
+        return json;
+    }
 }

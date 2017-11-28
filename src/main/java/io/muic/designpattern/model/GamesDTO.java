@@ -6,10 +6,17 @@ package io.muic.designpattern.model;
 public class GamesDTO {
     private int gameID;
     private String hostName;
+    private String fen;
 
     public GamesDTO(int gameID, String hostName) {
         this.gameID = gameID;
         this.hostName = hostName;
+    }
+
+    public GamesDTO(int gameID, String hostName, String fen) {
+        this.gameID = gameID;
+        this.hostName = hostName;
+        this.fen = fen;
     }
 
     public int getGameID() {
@@ -26,5 +33,13 @@ public class GamesDTO {
 
     public void setHostName(String hostName) {
         this.hostName = hostName;
+    }
+
+    public String getFen() {
+        return fen;
+    }
+
+    public void setFen(String fen) {
+        this.fen = fen;
     }
 }
