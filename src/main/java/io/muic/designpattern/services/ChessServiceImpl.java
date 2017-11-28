@@ -34,5 +34,14 @@ public class ChessServiceImpl implements ChessService {
         return chessRepository.findAllByPlayerIsNullAndHostIsNot(user);
     }
 
+    @Override
+    public void delete(int id){
+        chessRepository.delete(id);
+    }
+
+    @Override
+    public List<Chess> getOnePlayerGames(User user){
+        return chessRepository.findAllByPlayerIsNullAndHostIs(user);
+    }
 
 }

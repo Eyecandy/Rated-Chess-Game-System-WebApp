@@ -40,4 +40,10 @@ public class GamesController {
         json.put("game", gamesDTO);
         return json;
     }
+
+    @RequestMapping(value = "/delete/{chessID}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable String chessID){
+        chessService.delete(Integer.parseInt(chessID));
+        System.out.println("Deleted chess game " + chessID);
+    }
 }

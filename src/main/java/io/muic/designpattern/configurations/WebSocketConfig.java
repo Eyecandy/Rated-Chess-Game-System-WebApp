@@ -1,6 +1,10 @@
 package io.muic.designpattern.configurations;
 
+import io.muic.designpattern.model.Chess;
+import io.muic.designpattern.model.User;
+import io.muic.designpattern.services.ChessService;
 import io.muic.designpattern.services.SubscriberService;
+import io.muic.designpattern.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -27,6 +31,12 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Autowired
     SubscriberService subscriberService;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ChessService chessService;
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/sub");
@@ -52,7 +62,14 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
                 String token = null;
                 System.out.println(accessor.getCommand().getMessageType());
                 if (accessor.getCommand().getMessageType() == SimpMessageType.DISCONNECT) {
-                    subscriberService.removeSession(accessor.getSessionId());
+                    String userString = subscriberService.getSubscribers().get(accessor.getSessionId());
+                    User user = userService.findUserByUsername(userString);
+                    List<Chess> onePlayerGames = chessService.getOnePlayerGames(user);
+                    for (Chess game : onePlayerGames){
+                        chessService.delete(game.getId());
+                    }
+                    subscriberService.removeSession(accessor.getSessionId(),userString);
+
                 }
                 if (tokenList == null || tokenList.size() < 1) {
                     return message;

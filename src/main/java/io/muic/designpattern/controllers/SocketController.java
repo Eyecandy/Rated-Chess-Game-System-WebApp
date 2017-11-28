@@ -70,26 +70,15 @@ public class SocketController {
     }
 
     @MessageMapping(value = "/msg/{id}")
-    @SendTo("/sub/game")
+    @SendTo("/sub/game/{id}")
     public Reply reply1(SimpMessageHeaderAccessor simpMessageHeaderAccessor, MyMessage message, @DestinationVariable int id) throws Exception {
         Chess chessGame = chessService.findOne(id);
-//        Chess chessGame = null;
         if (chessGame == null)
             return new Reply("Error");
         String from = message.getFrom();
         String player1 = chessGame.getHost().getUsername();
-//        System.out.println("Chess game player : " + message.getFrom());
-//        System.out.println(message.getFrom() + " TEST " + id);
-//        String s = subscriberService.getSubscribers().get(simpMessageHeaderAccessor.getSessionId());
-//        return new Reply("In Game " + s);
-//        ChessGame chessGame= ChessGameService.findOne(id);
-//        .....
-//        if (message.getCommand().equals("reset")) {
-//            player1 = "";
-//            player2 = "";
-//            return new Reply("reset");
-//        }
-        if (message.getCommand().equals("start")){
+
+        if (!chessGame.isOngoing() && message.getCommand().equals("start")){
             if (chessGame.getHost().getUsername().equals(from)){
                 System.out.println("player1 set");
                 Reply wait = new Reply("wait");
@@ -100,6 +89,7 @@ public class SocketController {
                 if (player2 == null)
                     return new Reply("Error");
                 chessGame.setPlayer(player2);
+                chessGame.setOngoing(true);
                 chessService.saveChess(chessGame);
                 Reply start = new Reply("start");
                 start.setPlayer1(player1);
@@ -107,31 +97,45 @@ public class SocketController {
                 System.out.println("player2 set");
                 return start;
             }
-        }
-        if (message.getCommand().equals("move")){ // (message.getFrom().equals(player1))
-            String player = message.getFrom();
-            String reply = "switch";
-            String fen = message.getFenBoard();
-            String source = message.getSource();
-            String target = message.getTarget();
-            String player2 = chessGame.getPlayer().getUsername();
+        } else {
+            System.out.println("ONGOING");
+            System.out.println("P1 online" + subscriberService.getUserOnline(player1));
+            if (!subscriberService.getUserOnline(player1)) {
+                System.out.println("P1 offline");
+                return new Reply("disconnect");
+            }
+            User p2 = chessGame.getPlayer();
+            System.out.println("P2 online" + subscriberService.getUserOnline(p2.getUsername()));
+            if (!subscriberService.getUserOnline(p2.getUsername())) {
+                System.out.println("P2 offline");
+                return new Reply("disconnect");
+            }
 
-            int turn = (player.equals(chessGame.getHost().getUsername())) ? 2 : 1;
-            System.out.println(chessGame.getHost().getUsername());
-            System.out.println(chessGame.getPlayer().getUsername());
-            System.out.println(from);
-            System.out.println(turn);
+            if (message.getCommand().equals("move")){
+                String player = message.getFrom();
+                String reply = "switch";
+                String fen = message.getFenBoard();
+                String source = message.getSource();
+                String target = message.getTarget();
+                String player2 = chessGame.getPlayer().getUsername();
 
-            chessGame.setCurrentPlayer(turn);
-            chessGame.setFen(fen);
-            chessService.saveChess(chessGame);
+                int turn = (player.equals(chessGame.getHost().getUsername())) ? 2 : 1;
+                System.out.println(chessGame.getHost().getUsername());
+                System.out.println(chessGame.getPlayer().getUsername());
+                System.out.println(from);
+                System.out.println(turn);
 
-            Reply move = new Reply(reply, turn, fen);
-            move.setSource(source);
-            move.setTarget(target);
-            move.setPlayer1(player1);
-            move.setPlayer2(player2);
-            return move;
+                chessGame.setCurrentPlayer(turn);
+                chessGame.setFen(fen);
+                chessService.saveChess(chessGame);
+
+                Reply move = new Reply(reply, turn, fen);
+                move.setSource(source);
+                move.setTarget(target);
+                move.setPlayer1(player1);
+                move.setPlayer2(player2);
+                return move;
+            }
         }
         return new Reply("Chess");
     }

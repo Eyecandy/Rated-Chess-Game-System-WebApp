@@ -12,4 +12,8 @@ public interface ChessService {
     List<Chess> getAllGamesAvailable();
 
     List<Chess> getGamesAvailable(User user);
+
+    List<Chess> getOnePlayerGames(User user);
+
+    void delete(int id);
 }
