@@ -18,5 +18,7 @@ public interface ChessRepository extends JpaRepository<Chess, Integer> {
 
     List<Chess> findAllByPlayerIsNullAndHostIs(User user);
 
+    List<Chess> findAllByOngoingIsTrueAndHostIsOrPlayerIs(User user1, User user2);
+
     //List<Chess> findAllByOngoingTrueAndHostEqualsOrPlayerEquals(User user1, User user2);
 }

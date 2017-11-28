@@ -1,24 +1,21 @@
-package repositories;
+package io.muic.designpattern.repositories;
 
 import io.muic.designpattern.model.User;
-import io.muic.designpattern.repositories.UserRepository;
-import io.muic.designpattern.services.UserService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.PersistenceContext;
 
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -31,9 +28,6 @@ public class UserRepositoryTest {
     @MockBean
     UserRepository userRepository;
 
-
-
-
     @Before
     public void setUp() {
         User alex = new User();
@@ -45,8 +39,6 @@ public class UserRepositoryTest {
 
     @Test
     public void addAndFindName() {
-
-
         String userName = "vex";
         User found = userRepository.findByUsername(userName);
         User found1 = userRepository.findByUsername("jo");

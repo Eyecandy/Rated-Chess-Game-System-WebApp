@@ -15,5 +15,7 @@ public interface ChessService {
 
     List<Chess> getOnePlayerGames(User user);
 
+    List<Chess> getOngoingGames(User user);
+
     void delete(int id);
 }

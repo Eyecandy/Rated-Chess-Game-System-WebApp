@@ -22,11 +22,11 @@ public class Chess {
 
     @Column(name = "complete")
     @ColumnDefault("false")
-    private boolean isComplete;
+    private boolean complete;
 
     @Column(name = "ongoing")
     @ColumnDefault("false")
-    private boolean isOngoing;
+    private boolean ongoing;
 
     @Column(name = "currentPlayer")
     private int currentPlayer;
@@ -47,11 +47,11 @@ public class Chess {
     }
 
     public boolean isComplete() {
-        return isComplete;
+        return complete;
     }
 
     public boolean isOngoing() {
-        return isOngoing;
+        return ongoing;
     }
 
     public int getCurrentPlayer() {
@@ -63,7 +63,7 @@ public class Chess {
     }
 
     public void setComplete(boolean complete) {
-        isComplete = complete;
+        this.complete = complete;
     }
 
     public void setHost(User host) {
@@ -79,7 +79,7 @@ public class Chess {
     }
 
     public void setOngoing(boolean ongoing) {
-        isOngoing = ongoing;
+        this.ongoing = ongoing;
     }
 
     public void setFen(String fen) {

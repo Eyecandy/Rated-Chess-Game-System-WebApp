@@ -77,7 +77,6 @@ public class SocketController {
             return new Reply("Error");
         String from = message.getFrom();
         String player1 = chessGame.getHost().getUsername();
-
         if (!chessGame.isOngoing() && message.getCommand().equals("start")){
             if (chessGame.getHost().getUsername().equals(from)){
                 System.out.println("player1 set");
