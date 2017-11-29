@@ -92,9 +92,9 @@ public class SocketController {
                     Reply start = new Reply("start");
                     if (player1.equals(onlinePlayers.getPlayerOne())){
                         start.setPlayer1(player1);
-                        start.setPlayer2(from);
+                        start.setPlayer2(chessGame.getPlayer().getUsername());
                     }else {
-                        start.setPlayer1(from);
+                        start.setPlayer1(chessGame.getPlayer().getUsername());
                         start.setPlayer2(player1);
                     }
                     start.setFenBoard(chessGame.getFen());
