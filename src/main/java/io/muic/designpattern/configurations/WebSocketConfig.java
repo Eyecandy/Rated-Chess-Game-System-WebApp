@@ -29,13 +29,13 @@ import java.util.List;
 public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Autowired
-    SubscriberService subscriberService;
+    private SubscriberService subscriberService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    ChessService chessService;
+    private ChessService chessService;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {

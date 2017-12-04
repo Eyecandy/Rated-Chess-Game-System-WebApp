@@ -21,10 +21,10 @@ import java.util.List;
 public class GamesController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    ChessService chessService;
+    private ChessService chessService;
 
     @RequestMapping(value = "/available/{user}", method = RequestMethod.GET)
     public JSONObject gamesAvailable(@PathVariable String user){

@@ -12,7 +12,7 @@ import java.util.List;
 public class ChessServiceImpl implements ChessService {
 
     @Autowired
-    ChessRepository chessRepository;
+    private ChessRepository chessRepository;
 
     @Override
     public Chess findOne(int aInt) {

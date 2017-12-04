@@ -21,16 +21,16 @@ import java.security.Principal;
 public class SocketController {
 
     @Autowired
-    SubscriberService subscriberService;
+    private SubscriberService subscriberService;
 
     @Autowired
-    ChessService chessService;
+    private ChessService chessService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    OnlineUserService onlineUserService;
+    private OnlineUserService onlineUserService;
 
     private SimpMessagingTemplate template;
 

@@ -23,7 +23,7 @@ public class UsersController {
     @Autowired
     private UserService userService;
     @Autowired
-    SecurityConfiguration securityConfiguration;
+    private SecurityConfiguration securityConfiguration;
 
     /**
      * @param user the object being registered

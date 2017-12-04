@@ -21,10 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class SessionsController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    SecurityConfiguration securityConfiguration;
+    private SecurityConfiguration securityConfiguration;
 
     /**
      * @param user the login depends on the validity user.username and user.password
