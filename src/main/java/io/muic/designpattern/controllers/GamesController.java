@@ -28,7 +28,6 @@ public class GamesController {
 
     @RequestMapping(value = "/availableGamesBy/{user}", method = RequestMethod.GET)
     public JSONObject gamesAvailable(@PathVariable String user){
-        System.out.println(user);
         User userExist = userService.findUserByUsername(user);
         JSONObject json = new JSONObject();
         List<Chess> games = chessService.getGamesAvailable(userExist);

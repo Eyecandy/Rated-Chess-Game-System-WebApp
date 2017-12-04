@@ -48,5 +48,4 @@ public class ChessServiceImpl implements ChessService {
     public List<Chess> getOngoingGames(User user) {
         return chessRepository.findAllByOngoingIsTrueAndHostIsOrPlayerIs(user, user);
     }
-
 }
