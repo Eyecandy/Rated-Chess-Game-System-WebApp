@@ -1,5 +1,6 @@
 package io.muic.designpattern.controllers;
 
+import io.muic.designpattern.components.*;
 import io.muic.designpattern.model.*;
 import io.muic.designpattern.services.ChessService;
 import io.muic.designpattern.services.OnlineUserService;
@@ -12,10 +13,10 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
-import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class SocketController {
@@ -34,9 +35,15 @@ public class SocketController {
 
     private SimpMessagingTemplate template;
 
+    private Map<String, ChessReplyStrategy> replyStrategies = new HashMap<>();
+
     @Autowired
-    public SocketController(SimpMessagingTemplate template){
+    public SocketController(SimpMessagingTemplate template, SubscriberService subscriberService, ChessService chessService, UserService userService, OnlineUserService onlineUserService){
         this.template = template;
+        this.subscriberService = subscriberService;
+        replyStrategies.put("start", new StartStrategy(chessService, userService));
+        replyStrategies.put("resume", new ResumeStrategy(onlineUserService, chessService));
+        replyStrategies.put("move", new MoveStrategy(chessService, subscriberService));
     }
 
     @MessageMapping("/msg")
@@ -75,99 +82,10 @@ public class SocketController {
 
     @MessageMapping(value = "/msg/{id}")
     @SendTo("/sub/game/{id}")
-    public Reply reply1(SimpMessageHeaderAccessor simpMessageHeaderAccessor, MyMessage message, @DestinationVariable int id) throws Exception {
+    public Reply reply1(MyMessage message, @DestinationVariable int id) throws Exception {
         Chess chessGame = chessService.findOne(id);
         if (chessGame == null)
             return new Reply("Error");
-        String from = message.getFrom();
-        String player1 = chessGame.getHost().getUsername();
-
-        if (message.getCommand().equals("resume")){
-            System.out.println("RESUME");
-            OnlineTuple onlinePlayers = onlineUserService.getGame(id);
-            if (onlinePlayers != null){
-                if (from.equals(onlinePlayers.getPlayerOne())){
-                    return new Reply("wait");
-                }else {
-                    Reply start = new Reply("start");
-                    if (player1.equals(onlinePlayers.getPlayerOne())){
-                        start.setPlayer1(player1);
-                        start.setPlayer2(chessGame.getPlayer().getUsername());
-                    }else {
-                        start.setPlayer1(chessGame.getPlayer().getUsername());
-                        start.setPlayer2(player1);
-                    }
-                    start.setFenBoard(chessGame.getFen());
-                    start.setTurn(chessGame.getCurrentPlayer());
-                    System.out.println("current turn " +chessGame.getCurrentPlayer() );
-                    onlineUserService.removeGame(id);
-                    return start;
-                }
-            }else {
-                onlineUserService.addGame(id, from,"");
-                return new Reply("wait");
-            }
-        }
-
-        if (!chessGame.isOngoing() && message.getCommand().equals("start")){
-            if (chessGame.getHost().getUsername().equals(from)){
-                System.out.println("player1 set");
-                Reply wait = new Reply("wait");
-                wait.setPlayer1(from);
-                return wait;
-            }else {
-                User player2 = userService.findUserByUsername(from);
-                if (player2 == null)
-                    return new Reply("Error");
-                chessGame.setPlayer(player2);
-                chessGame.setOngoing(true);
-                chessService.saveChess(chessGame);
-                Reply start = new Reply("start");
-                start.setPlayer1(player1);
-                start.setPlayer2(from);
-                System.out.println("player2 set");
-                return start;
-            }
-        } else {
-            System.out.println("ONGOING");
-            System.out.println("P1 online" + subscriberService.getUserOnline(player1));
-            if (!subscriberService.getUserOnline(player1)) {
-                System.out.println("P1 offline");
-                return new Reply("disconnect");
-            }
-            User p2 = chessGame.getPlayer();
-            System.out.println("P2 online" + subscriberService.getUserOnline(p2.getUsername()));
-            if (!subscriberService.getUserOnline(p2.getUsername())) {
-                System.out.println("P2 offline");
-                return new Reply("disconnect");
-            }
-
-            if (message.getCommand().equals("move")){
-                String player = message.getFrom();
-                String reply = "switch";
-                String fen = message.getFenBoard();
-                String source = message.getSource();
-                String target = message.getTarget();
-                String player2 = chessGame.getPlayer().getUsername();
-
-                int turn = (player.equals(chessGame.getHost().getUsername())) ? 2 : 1;
-                System.out.println(chessGame.getHost().getUsername());
-                System.out.println(chessGame.getPlayer().getUsername());
-                System.out.println(from);
-                System.out.println(turn);
-
-                chessGame.setCurrentPlayer(turn);
-                chessGame.setFen(fen);
-                chessService.saveChess(chessGame);
-
-                Reply move = new Reply(reply, turn, fen);
-                move.setSource(source);
-                move.setTarget(target);
-                move.setPlayer1(player1);
-                move.setPlayer2(player2);
-                return move;
-            }
-        }
-        return new Reply("Chess");
+        return replyStrategies.getOrDefault(message.getCommand(), new EmptyStrategy()).execute(message, id);
     }
 }
