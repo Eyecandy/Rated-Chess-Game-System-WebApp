@@ -26,7 +26,7 @@ public class GamesController {
     @Autowired
     private ChessService chessService;
 
-    @RequestMapping(value = "/available/{user}", method = RequestMethod.GET)
+    @RequestMapping(value = "/availableGamesBy/{user}", method = RequestMethod.GET)
     public JSONObject gamesAvailable(@PathVariable String user){
         User userExist = userService.findUserByUsername(user);
         JSONObject json = new JSONObject();
@@ -40,13 +40,13 @@ public class GamesController {
         return json;
     }
 
-    @RequestMapping(value = "/delete/{chessID}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/chess/{chessID}", method = RequestMethod.DELETE)
     public void delete(@PathVariable String chessID){
         chessService.delete(Integer.parseInt(chessID));
         System.out.println("Deleted chess game " + chessID);
     }
 
-    @RequestMapping(value = "/ongoing/{user}", method = RequestMethod.GET)
+    @RequestMapping(value = "/ongoingGamesBy/{user}", method = RequestMethod.GET)
     public JSONObject ongoing(@PathVariable String user){
         System.out.println(user);
         User userExist = userService.findUserByUsername(user);
